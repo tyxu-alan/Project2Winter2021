@@ -9,6 +9,7 @@ import json
 from Project2Winter2021 import secrets
 
 CACHE_FILENAME = "nps_cache.json"
+CACHE_DICT = {}
 
 def open_cache():
     ''' opens the cache file if it exists and loads the JSON into
@@ -272,11 +273,6 @@ def print_nearby_places(api_dict):
     ----------
     api_dict : dictionary
         a converted API return from MapQuest API
-
-    Returns
-    -------
-    list
-        nearby places in a list
     '''
     places_lst = []
     for place in api_dict["searchResults"]:
@@ -292,7 +288,7 @@ def print_nearby_places(api_dict):
             city = "No city"
         places_lst.append(name + " (" + category + "): " + address + ", " + city)
     for place in places_lst:
-        print("-" + place)
+        print("- " + place)
 
 
 if __name__ == "__main__":
@@ -342,12 +338,18 @@ if __name__ == "__main__":
                 print("-" * 50)
                 continue
             else:
-                api_resp = get_nearby_places(return_parks[i-1])
-                print("-" * 35)
-                print(f"Places near {return_parks[number-1].name}")
-                print("-" * 35)
-                print_nearby_places(api_resp)
+                # check if the selected park has a zipcode
+                if return_parks[number-1].zipcode == "No zipcode":
+                    print("[Error] Invalid input \n")
+                    print("-" * 50)
+                    continue
+                # print the API respond information
+                else:
+                    print(return_parks[number-1].zipcode)
+                    api_resp = get_nearby_places(return_parks[number-1])
+                    print("-" * 35)
+                    print(f"Places near {return_parks[number-1].name}")
+                    print("-" * 35)
+                    print_nearby_places(api_resp)
         if commend2 == "exit":
             break
-
-    # get_nearby_places(get_site_instance('https://www.nps.gov/yell/index.htm'))
