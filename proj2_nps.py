@@ -296,19 +296,21 @@ def print_nearby_places(api_dict):
 
 
 if __name__ == "__main__":
-
+    # part 1 : build the dictionary of state urls
     state_url_dict = build_state_url_dict()
-
+    # wait for user to input a state name
     while True:
-        commend = input("Enter a state name (e.g. Michigan, michigan) or \"exit\": ").lower()
+        commend = input("Enter a state name (e.g. Michigan, michigan) or \"exit\" \n:").lower()
+        # check if it is a valid key
         try:
             target_url = state_url_dict[commend]
         except:
             if commend == "exit":
                 break
             else:
-                print("[Error] Enter proper state name")
+                print("[Error] Enter proper state name" + "\n")
                 continue
+        # print the retrieved information
         return_parks = get_sites_for_state(target_url)
 
         print("-" * 35)
@@ -317,11 +319,12 @@ if __name__ == "__main__":
 
         index = range(len(return_parks))
         for i in index:
-            print(f"[{i+1}]" + return_parks[i].info())
+            print(f"[{i+1}]" + " " + return_parks[i].info())
 
         commend2 = ""
         while True:
-            commend2 = input("Choose the number for detail search or \"exit\" or \"back\": ")
+            commend2 = input("Choose the number for detail search or \"exit\" or \"back\" \n:")
+            # check if input is integer
             try:
                 number = int(commend2)
             except:
@@ -330,12 +333,13 @@ if __name__ == "__main__":
                 elif commend2 == "back":
                     break
                 else:
-                    print("[Error] Invalid input")
-                    print("\n" + "-" * 35)
+                    print("[Error] Invalid input \n")
+                    print("-" * 50)
                     continue
+            # check if input is within range
             if number-1 not in index:
-                print("[Error] Invalid input")
-                print("\n" + "-" * 35)
+                print("[Error] Invalid input \n")
+                print("-" * 50)
                 continue
             else:
                 api_resp = get_nearby_places(return_parks[i-1])
